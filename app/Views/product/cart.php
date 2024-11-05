@@ -1,5 +1,5 @@
 <br>
-<h1 class="text-center">Votre Panier</h1>
+<h1 class="text-center">Votre Panier ...</h1>
 <br>
 
 <div class="container">
