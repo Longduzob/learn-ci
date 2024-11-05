@@ -80,21 +80,21 @@
                 <div class="card-group d-block d-md-flex row">
                     <div class="card col-md-7 p-4 mb-0">
                         <div class="card-body">
-                            <h1>Connexion</h1>
-                            <p class="text-body-secondary">Connecter vous à votre compte</p>
+                            <h1>Inscription</h1>
+                            <p class="text-body-secondary">Créer un compte</p>
                             <form action="<?= base_url('/login'); ?>" method="POST">
                                 <div class="input-group mb-3">
-                                    <input class="form-control" type="mail" placeholder="Adresse Mail" name="email">
+                                    <input class="form-control" type="username" placeholder="Pseudo" name="username">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input class="form-control" type="email" placeholder="Adresse Mail" name="email">
                                 </div>
                                 <div class="input-group mb-4">
                                     <input class="form-control" type="password" placeholder="Mot de passe" name="password">
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
-                                        <button class="btn btn-primary px-4" type="submit">Se connecter</button>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <button class="btn btn-link px-0" type="button">Mot de passe oublié ?</button>
+                                        <button class="btn btn-primary px-4" type="submit">S'inscrire</button>
                                     </div>
                                 </div>
                             </form>
@@ -103,11 +103,12 @@
                     <div class="card col-md-5 text-white bg-primary py-5">
                         <div class="card-body text-center">
                             <div>
-                                <h2>Rejoignez-nous !</h2>
+                                <h2>Déjà inscrit ?</h2>
+                                <br>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                                     incididunt ut labore et dolore magna aliqua.</p>
-                                <a class="btn btn-lg btn-outline-light mt-3" href="<?= base_url('/login/register');
-                                ?>" >Créer un compte</a>
+                                <a class="btn btn-lg btn-outline-light mt-3" href="<?= base_url('/login');
+                                ?>" >Se connecter</a>
                             </div>
                         </div>
                     </div>

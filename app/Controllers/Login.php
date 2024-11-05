@@ -47,6 +47,36 @@ class Login extends BaseController
     }
 
 
+
+
+    public function getregister() {
+        $flashData = session()->getFlashdata('data');
+
+        // Préparer les données à passer à la vue
+        $data = [
+            'errors' => $flashData['errors'] ?? null,
+            // Autres données à passer à la vue
+        ];
+        return view('/login/register',$data);
+    }
+
+    public function postregister() {
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+        $username = $this->request->getPost('username');
+        $data = ['username' => $username, 'email' => $email, 'password' => $password, 'id_permission' => 3];
+        $um = Model('UserModel');
+        if (!$um->createUser($data)) {
+            $errors = $um->errors();
+            $data = ['errors' => $errors];
+            return $this->redirect("/login/register", $data);
+        }
+        return $this->redirect("/login");
+    }
+
+
+
+
     public function getlogout()
     {
         $this->logout();

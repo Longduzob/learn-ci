@@ -61,15 +61,46 @@
                     </li>
             </ul>
 
+
+
             <!-- Right-side buttons -->
             <div class="d-flex align-items-center">
-                <!-- Cart Button -->
-                <a href="/product/cart" class="btn btn-outline-success me-3">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                </a>
+                <!-- Bouton du panier avec dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-success me-3 dropdown-toggle" type="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </button>
+
+                    <!-- Contenu du dropdown -->
+                    <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="cartDropdown" style="min-width: 300px;">
+                        <?php if (isset($cart) && !empty($cart)) : ?>
+                            <?php foreach ($cart as $index => $item) : ?>
+                                <tr>
+                                    <td><?= esc($item['name']); ?></td>
+                                    <td><?= esc($item['quantity']); ?></td>
+                                    <td><?= esc($item['price']); ?> €</td>
+                                    <td><?= esc($item['quantity'] * $item['price']); ?> €</td>
+                                </tr>
+                                <td><strong>Total : <?= esc($total); ?> €</strong></td>
+                            <?php endforeach; ?>
+                            <li class="mt-2">
+                                <a href="/product/cart" class="btn btn-success w-100">Accéder au Panier</a>
+                            </li>
+                        <?php else : ?>
+                            <p class="text-center">Votre panier est vide.</p>
+                            <li class="mt-2">
+                                <a href="/product/cart" class="btn btn-success w-100">Accéder au Panier</a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
 
                 <!-- Logout Button -->
-                <a href="/login" class="btn btn-danger me-2"><i class="fa-solid fa-power-off"></i></a>
+                <form method="POST" action="/login" style="display: inline;">
+                    <button type="submit" class="btn btn-danger me-2">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </form>
             </div>
 
 
