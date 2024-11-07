@@ -15,7 +15,7 @@ class ShoppingCart
         if (!$this->session->has('cart')) {
             $this->session->set('cart', [
                 'items' => [],
-                'count'=> 0,
+                'count' => 0,
                 'total' => 0
             ]);
         }
@@ -25,7 +25,7 @@ class ShoppingCart
     public function addProduct(array $product)
     {
         // Récupérer le panier actuel depuis la session
-        $cart = $this->session->get('cart') ?? ['items' => [],'count' => 0, 'total' => 0]; // Initialiser un panier vide si absent
+        $cart = $this->session->get('cart') ?? ['items' => [], 'count' => 0, 'total' => 0];
 
         // Vérifier si le produit existe déjà dans le panier
         $found = false;
@@ -33,7 +33,6 @@ class ShoppingCart
             if ($item['id'] == $product['id']) {
                 // Si le produit existe déjà, augmenter la quantité
                 $item['quantity'] += $product['quantity'];
-
                 $found = true;
                 break;
             }
@@ -44,13 +43,13 @@ class ShoppingCart
             $cart['items'][] = $product;
         }
 
-        // Recalculer le total du panier
+        // Recalculer le total et le nombre d'articles du panier
         $cart['total'] = $this->calculateTotal($cart['items']);
         $cart['count'] = $this->calculateCountItem($cart['items']);
+
         // Mettre à jour la session avec le nouveau panier
         $this->session->set('cart', $cart);
     }
-
 
     // Supprimer un produit du panier (par index)
     public function removeProduct($index)
@@ -58,7 +57,7 @@ class ShoppingCart
         $cart = $this->session->get('cart');
         if (isset($cart['items'][$index])) {
             unset($cart['items'][$index]);
-            $cart['items'] = array_values($cart['items']);  // Réindexer le tableau
+            $cart['items'] = array_values($cart['items']);
             $cart['total'] = $this->calculateTotal($cart['items']);
             $cart['count'] = $this->calculateCountItem($cart['items']);
             $this->session->set('cart', $cart);
@@ -77,11 +76,18 @@ class ShoppingCart
         return $this->session->get('cart')['total'];
     }
 
+    // Obtenir le nombre total d'articles dans le panier
+    public function getCount()
+    {
+        return $this->session->get('cart')['count'];
+    }
+
     // Vider le panier
     public function clear()
     {
         $this->session->set('cart', [
             'items' => [],
+            'count' => 0,
             'total' => 0
         ]);
     }
@@ -91,12 +97,14 @@ class ShoppingCart
     {
         $total = 0;
         foreach ($items as $item) {
-            $total += $item['price'] * $item['quantity'];  // On suppose que chaque produit a 'price' et 'quantity'
+            $total += $item['price'] * $item['quantity'];
         }
         return $total;
     }
 
-    protected function calculateCountItem(array $items) {
+    // Calculer le nombre total d'articles
+    protected function calculateCountItem(array $items)
+    {
         $count = 0;
         foreach ($items as $item) {
             $count += $item['quantity'];

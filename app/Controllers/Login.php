@@ -28,12 +28,16 @@ class Login extends BaseController
                 return view('/login/login');
             }
             $this->session->set('user', $user);
-            return $this->redirect('/product');
+            if ($email == 'admin@admin.fr') {
+                return $this->redirect('/product');
+            } else {
+                return $this->redirect('/product/client');
+            }
         } else {
-            // Gérer l'échec de l'authentification
             return view('/login/login');
         }
     }
+
 
     public function getregister() {
         $flashData = session()->getFlashdata('data');

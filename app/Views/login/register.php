@@ -82,7 +82,7 @@
                         <div class="card-body">
                             <h1>Inscription</h1>
                             <p class="text-body-secondary">Créer un compte</p>
-                            <form action="<?= base_url('/login'); ?>" method="POST">
+                            <form action="<?= base_url('/user/create'); ?>" method="POST">
                                 <div class="input-group mb-3">
                                     <input class="form-control" type="username" placeholder="Pseudo" name="username">
                                 </div>

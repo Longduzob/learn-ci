@@ -11,15 +11,27 @@
                             <tr>
                                 <th>Nom du produit</th>
                                 <th>Quantité</th>
-                                <th>Prix</th>
+                                <th>Prix unitaire</th>
+                                <th>Prix total</th>
+                                <th class="text-center">Supprimer</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($products as $product): ?>
+                            <?php foreach($products as $index => $product): ?>
                                 <tr>
                                     <td><?= $product['name']; ?></td>
                                     <td><?= $product['quantity']; ?></td>
                                     <td><?= $product['price']; ?></td>
+                                    <td><?= $product['price'] * $product['quantity']; ?></td>
+                                    <td class="text-center">
+                                        <!-- Formulaire de suppression du produit -->
+                                        <form method="POST" action="<?= base_url('/cart/removeProduct'); ?>">
+                                            <input type="hidden" name="index" value="<?= $index; ?>">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             <?php  endforeach; ?>
                         </tbody>

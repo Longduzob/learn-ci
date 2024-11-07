@@ -35,5 +35,12 @@ class Cart extends BaseController
         return $this->redirect('/cart');
     }
 
+    public function postremoveProduct()
+    {
+        $index = $this->request->getPost('index');
+        $cart = new ShoppingCart();
+        $cart->removeProduct($index);
+        return $this->redirect('/cart');
+    }
 
 }
