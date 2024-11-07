@@ -23,9 +23,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('/user'); ?>">Utilisateurs</a>
+                    </li>
                     <!-- Onglet Produits -->
                     <li class="nav-item">
                         <a class="nav-link" href="<?= base_url('/product'); ?>">Produits</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('/product/client'); ?>">Produits-Clients</a>
                     </li>
                 </ul>
 

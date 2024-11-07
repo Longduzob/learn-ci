@@ -1,5 +1,5 @@
 <form method="POST" action="/product/<?= isset($product['id']) ? 'update':'create'; ?>">
-    <div class="container">
+    <div class="container mt-4">
         <?php if (isset($errors)) { ?>
             <div class="row justify-content-center">
                 <div class="col-md-5">

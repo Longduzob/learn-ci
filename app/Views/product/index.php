@@ -1,11 +1,14 @@
 <div class="container">
     <div class="row">
-        <div class="col-12">
-            <h3 class="mb-4 mt-4 text-center">Liste des Produits</h3>
+        <div class="col-12 text-center">
+            <h3 class="mb-4 mt-4">Liste des Produits</h3>
+            <a href="<?= base_url('/product/new'); ?>" class="btn btn-primary mb-4" title="Éditer">
+                Ajouter un nouveau produit <i class="fa-solid fa-plus"></i>
+            </a>
         </div>
 
         <?php foreach($products as $product): ?>
-            <div class="col-md-3 mb-4"> <!-- Modifié de col-md-4 à col-md-3 -->
+            <div class="col-md-3 mb-4 mt-4"> <!-- Modifié de col-md-4 à col-md-3 -->
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title text-center"><?= $product['name']; ?></h5>
