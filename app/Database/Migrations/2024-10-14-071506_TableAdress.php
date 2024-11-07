@@ -4,52 +4,40 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class TableAdress extends Migration
+class TableAddress extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'id' => [
+            'id'           => [
                 'type'           => 'INT',
                 'constraint'     => 11,
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'cp' => [
+            'postal_code'  => [
                 'type'       => 'VARCHAR',
-                'constraint' => '99999',
-                'unsigned'       => true,
-                'default' => 0,
+                'constraint' => 10,
             ],
-            'ville' => [
+            'city'         => [
                 'type'       => 'VARCHAR',
-                'constraint' => '100',
-                'unsigned'       => true,
-                'default' => 0,
+                'constraint' => 100,
             ],
-            'rue' => [
+            'street'       => [
                 'type'       => 'VARCHAR',
-                'constraint' => '100',
-                'unsigned'       => true,
-                'default' => 0,
+                'constraint' => 255,
             ],
-            'complement' => [
-                'type'       => 'VARCHAR',
-                'constraint' => '100',
-                'unsigned'       => true,
-                'default' => 0,
+            'complement'   => [
+                'type'       => 'TEXT',
+                'null'       => true,
             ],
-
         ]);
-
-        $this->forge->addKey('id', true);
-        $this->forge->createTable('adress');
-
-
+        $this->forge->addKey('id', true); // Clé primaire
+        $this->forge->createTable('address');
     }
 
     public function down()
     {
-        //
+        $this->forge->dropTable('address');
     }
 }

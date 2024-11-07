@@ -9,11 +9,11 @@ class AddAdminUser extends Migration
     public function up()
     {
         $data = [
-            'username' => "admin",
-            'email' => "admin@admin.fr",
-            'password' => password_hash("admin", PASSWORD_DEFAULT),
-            'created_at' => date("Y-m-d H:i:s"),
-            'updated_at' => date("Y-m-d H:i:s")
+            'username'     => 'admin',
+            'email'        => 'admin@admin.fr',
+            'password'     => password_hash('admin', PASSWORD_DEFAULT),
+            'created_at'   => date('Y-m-d H:i:s'),
+            'updated_at'   => date('Y-m-d H:i:s'),
         ];
 
         $this->db->table('User')->insert($data);

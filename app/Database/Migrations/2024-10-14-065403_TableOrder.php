@@ -9,50 +9,45 @@ class TableOrder extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id' => [
+            'id'          => [
                 'type'           => 'INT',
                 'constraint'     => 11,
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'id_user' => [
-                'type'           => 'INT',
-                'constraint'     => 11,
-                'unsigned'       => true,
+            'id_user'     => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
             ],
-            'total' => [
-                'type'           => 'INT',
-                'constraint'     => 11,
-            ],
-            'date_c' => [
-                'type'       => 'DATETIME',
+            'total'       => [
+                'type'       => 'FLOAT',
                 'null'       => true,
             ],
-            'date_u' => [
-                'type'       => 'DATETIME',
+            'reduction'   => [
+                'type'       => 'FLOAT',
                 'null'       => true,
             ],
-            'date_d' => [
-                'type'       => 'DATETIME',
-                'null'       => true,
+            'created_at'  => [
+                'type' => 'DATETIME',
+                'null' => true,
             ],
-            'reduction' => [
-                'type'           => 'INT',
-                'constraint'     => 11,
+            'updated_at'  => [
+                'type' => 'DATETIME',
+                'null' => true,
             ],
-
+            'deleted_at'  => [
+                'type' => 'DATETIME',
+                'null' => true,
+            ],
         ]);
-
-        $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('id_user', 'user', 'id','CASCADE','CASCADE');
-        $this->forge->createTable('order');
-
-
+        $this->forge->addKey('id', true); // Clé primaire
+        $this->forge->addForeignKey('id_user', 'User', 'id', 'CASCADE', 'CASCADE'); // Clé étrangère vers users
+        $this->forge->createTable('orders');
     }
-
 
     public function down()
     {
-        //
+        $this->forge->dropTable('orders');
     }
 }

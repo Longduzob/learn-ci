@@ -8,46 +8,32 @@ class Login extends BaseController
 {
     protected $require_auth = false;
 
-
     public function getindex(): string
     {
-        return view('\login\login');
-
+        return view('/login/login');
     }
 
     public function postindex()
     {
-
+        // Traitement de la connexion
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
-
-//        print_r([
-//            'email' => $email,
-//            'password' => $password
-//        ]);
-
+        // Logique de vérification des informations d'identification
         $um = Model('UserModel');
-        $user = $um->verifyLogin($email, $password);
+        $user = $um->verifyLogin($email,$password);
+
         if ($user) {
             $user = new User($user);
-            if (!$user->isActive()) {
+            if (!$user->isActive()){
                 return view('/login/login');
             }
             $this->session->set('user', $user);
             return $this->redirect('/product');
         } else {
+            // Gérer l'échec de l'authentification
             return view('/login/login');
         }
     }
-
-    public function __construct()
-    {
-        // Démarrer la session dans le constructeur
-        $this->session = \Config\Services::session();
-    }
-
-
-
 
     public function getregister() {
         $flashData = session()->getFlashdata('data');
@@ -74,13 +60,8 @@ class Login extends BaseController
         return $this->redirect("/login");
     }
 
-
-
-
-    public function getlogout()
-    {
+    public function getlogout() {
         $this->logout();
         return $this->redirect("/login");
     }
-
 }

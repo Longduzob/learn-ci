@@ -2,84 +2,68 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\Model;
-
-class category extends BaseController
+class Category extends BaseController
 {
-
-    protected $require_auth = false;
-
-
     public function getindex($id = null)
     {
-        $cm = model('CategoryModel');
+        $cm = Model('CategoryModel');
         if ($id) {
             if ($id == "new") {
                 return $this->view('edit-category');
             }
-            $category = $cm->getcategoryById($id);
+            $category = $cm->getCategoryById($id);
             if ($category) {
                 return $this->view('edit-category', ['category' => $category]);
             } else {
-                $this->error("ID category introuvable");
+                $this->error("ID categorie non trouvable");
                 return $this->redirect("/category");
             }
-
         }
-        $categorys = $cm->getAllcategorys();
-        return $this->view('category-index', ['categorys' => $categorys]);
+        $categories = $cm->getAllCategorys();
+        return $this->view('category-index', ['categories' => $categories]);
     }
 
     public function gettest()
     {
         $this->message('Test');
         $this->error("Erreur");
-        $this->success("Succès");
-        $this->redirect("/product");
+        $this->success("Succés");
+        return $this->redirect("/category");
     }
 
-    public function postcreate()
-    {
+    public function postcreate() {
         $data = $this->request->getPost();
-        if (isset($data['name'])) {
-            $data['slug'] = generateSlug($data['name']);
-        }
         $cm = Model('CategoryModel');
-        if ($cm->insertcategory($data)) {
-            $this->success("Categorie créé avec succès");
+        if ($cm->insertCategory($data)) {
+            $this->success("Utilisateur créer avec succes");
             $this->redirect('/category');
         } else {
             $errors = $cm->errors();
-            $this->error("Erreur");
-            $this->redirect('/category/new', ['errors' => $errors, 'category' => $data]);
+            $this->redirect('/category', ['errors' => $errors, 'category' => $data]);
         }
     }
 
-    public function postupdate()
-    {
+    public function postupdate() {
         $data = $this->request->getPost();
         $cm = Model('CategoryModel');
-        if ($cm->updatecategory($data['id'], $data)) {
-            $this->success("Category modifié avec succès");
+        if ($cm->updateCategory($data['id'], $data)) {
+            $this->success("Utilisateur modifié avec succes");
             $this->redirect('/category');
         } else {
             $errors = $cm->errors();
-            $this->error("Erreur");
             $this->redirect('/category/' . $data['id'], ['errors' => $errors, 'category' => $data]);
         }
     }
 
-    public function getdelete($id = null)
-    {
+    public function getdelete($id = null) {
         if ($id) {
-            if (Model('CategoryModel')->deletecategory($id)) {
-                $this->success("Category supprimé");
+            if (Model('CategoryModel')->deleteCategory($id)) {
+                $this->success("Utilisateur supprimer avec succes");
             } else {
                 $this->error("Erreur");
             }
-            $this->redirect("/category");
         }
-
+        $this->redirect("/category");
     }
-}
 
+}

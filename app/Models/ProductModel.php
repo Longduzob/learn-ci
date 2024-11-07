@@ -6,86 +6,83 @@ use CodeIgniter\Model;
 
 class ProductModel extends Model
 {
-    protected $table = 'product';
-    protected $primaryKey = 'id';
+    protected $table            = 'product';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-    protected $useSoftDeletes = true;
-    protected $protectFields = true;
-    protected $allowedFields = ['name', 'price', 'quantity', 'id_category', 'slug', 'created_at', 'updated_at', 'delete_at'];
+    protected $returnType       = 'array';
+    protected $useSoftDeletes   = false;
+    protected $protectFields    = true;
+    protected $allowedFields    = ['name','price','quantity','slug','id_category'];
 
     protected bool $allowEmptyInserts = false;
-    protected bool $updateOnlyChanged = false;
+    protected bool $updateOnlyChanged = true;
 
     protected array $casts = [];
     protected array $castHandlers = [];
 
     // Dates
     protected $useTimestamps = true;
-    protected $dateFormat = 'datetime';
-    protected $createdField = 'created_at';
-    protected $updatedField = 'updated_at';
-    protected $deletedField = 'deleted_at';
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules = [
-        'name' => 'required|min_length[1]|max_length[100]',
-        'price' => 'required|min_length[0]',
-        'quantity' => 'required|min_length[1]|required|max_length[15]',
+    protected $validationRules      = [
+        'name' => 'required|min_length[3]|max_length[255]',
+        'price' => 'numeric',
+        'quantity' => 'integer',
     ];
-    protected $validationMessages = [
+    protected $validationMessages   = [
         'name' => [
-            'required' => 'Le nom du produit est requis.',
-            'min_length' => 'Le nom du produit doit comporter au moins 1 caractères.',
+            'required'   => 'Le nom du produit est requis.',
+            'min_length' => 'Le nom du produit doit comporter au moins 3 caractères.',
             'max_length' => 'Le nom du produit ne doit pas dépasser 100 caractères.',
         ],
         'price' => [
-            'required' => 'Le prix est requis.',
+            'numeric'   => 'Le prix doit être un chiffre.',
         ],
         'quantity' => [
-            'required' => 'Une quantité est requise.',
-            'min_length' => 'La quantité doit comporter au moins 1 caractères.',
+            'integer'   => 'La quantité doit être un chiffre entier.',
         ],
     ];
-    protected $skipValidation = false;
+    protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
+    // Callbacks
+    protected $allowCallbacks = false;
 
-    public function getAllproducts()
-    {
+    public function getAllProducts() {
         $builder = $this->db->table('product p');
-        $builder->select("p.id, p.name, p.price, p.quantity, p.id_category, p.slug, p.created_at, p.updated_at");
+
+        $builder->select("p.id, p.name, p.price, p.quantity, p.slug, p.id_category, c.name as category_name, p.created_at, p.updated_at");
+
         $builder->join('category c', 'c.id = p.id_category', 'left');
-        $builder->where('p.deleted_at IS NULL');
+
+        // Trier par ID décroissant pour afficher le dernier produit ajouté en premier
+        $builder->orderBy('p.id', 'DESC');
+
         return $builder->get()->getResultArray();
     }
 
-    public function getproductById($id)
-    {
+
+    public function getProductById($id) {
         return $this->find($id);
-
     }
 
-    public function insertproduct($data)
-    {
+    public function insertProduct($data) {
+        $data['slug'] = $this->generateUniqueSlug($data['name']);
         return $this->insert($data);
-
     }
 
-    public function updateproduct($id, $data)
-    {
-        $builder = $this->builder();
-        $data['updated_at'] = date('Y-m-d H:i:s');
-        $builder->where('id', $id);
-        return $builder->update($data);
-    }
-
-
-    public function deleteproduct($id)
-    {
+    public function deleteProduct($id) {
         return $this->delete($id);
     }
 
+    public function updateProduct($id, $data) {
+        $data['slug'] = $this->generateUniqueSlug($data['name']);
+        return $this->update($id,$data);
+    }
 
     private function generateUniqueSlug($name)
     {
@@ -103,22 +100,4 @@ class ProductModel extends Model
         }
         return $newSlug;
     }
-
-
-    public function getProductWithQuantityCheck($id, $requestedQuantity)
-    {
-        $product = $this->find($id);
-
-        if (!$product) {
-            return false; // Le produit n'existe pas
-        }
-
-        // Vérification que la quantité demandée est disponible
-        if ($requestedQuantity > $product['quantity']) {
-            return false; // Pas assez de stock disponible
-        }
-
-        return $product;
-    }
-
 }

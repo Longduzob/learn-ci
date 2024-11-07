@@ -11,7 +11,6 @@
                 </div>
             </div>
         <?php } ?>
-        <br>
         <div class="row">
             <div class="col">
                 <div class="card">
@@ -20,17 +19,19 @@
                     </div>
                     <div class="card-body">
                         <div class="mb-3 row">
-                            <label for="name" class="col-sm-2 col-form-label">Name</label>
+                            <label for="categoryname" class="col-sm-2 col-form-label">Nom</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="name" name="name" value="<?= isset($category) ? $category['name'] : ''; ?>">
                             </div>
                         </div>
+
                     </div>
                     <div class="card-footer">
                         <?php if(isset($category['id'])){ ?>
                             <input type="hidden" name="id" value="<?= $category['id']; ?>">
                         <?php } ?>
-                        <button class="btn btn-primary" type="submit"><?= isset($category['id']) ? "Modifier" : "Créer"; ?></button></div>
+                        <button class="btn btn-primary" type="submit"><?= isset($category['id']) ? "Modifier" : "Créer"; ?></button>
+                    </div>
                 </div>
             </div>
         </div>

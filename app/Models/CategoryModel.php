@@ -6,56 +6,50 @@ use CodeIgniter\Model;
 
 class CategoryModel extends Model
 {
-    protected $table = 'category';
-    protected $primaryKey = 'id';
+    protected $table            = 'category';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType = 'array';
-    protected $protectFields = true;
-    protected $allowedFields = ['name', 'slug'];
+    protected $returnType       = 'array';
+    protected $protectFields    = true;
+    protected $allowedFields    = ['name','slug'];
+
 
     // Validation
     protected $validationRules = [
-        'name' => 'required|min_length[2]|max_length[100]',
+        'name' => 'required|min_length[3]|max_length[255]'
     ];
+
     protected $validationMessages = [
-        'name' => [
-            'required' => 'La catégorie est requise.',
-            'min_length' => 'Le nom de la catégorie doit comporter au moins 2 caractères.',
-            'max_length' => 'Le nom de la catégorie ne doit pas dépasser 100 caractères.',
+        'username' => [
+            'required'   => 'Le nom de la catégorie est requis.',
+            'min_length' => 'Le nom de la catégorie doit comporter au moins 3 caractères.',
+            'max_length' => 'Le de la catégorie ne doit pas dépasser 255 caractères.',
         ],
     ];
-    protected $skipValidation = false;
+    protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-
-    public function getAllcategorys()
-    {
+    public function getAllCategorys() {
         return $this->findAll();
     }
 
-    public function getcategoryById($id)
-    {
+    public function getCategoryById($id) {
         return $this->find($id);
-
     }
 
-    public function insertCategory($data)
-    {
+    public function insertCategory($data) {
         $data['slug'] = $this->generateUniqueSlug($data['name']);
         return $this->insert($data);
     }
 
-    public function updatecategory($id, $data)
-    {
-        $data['slug'] = $this->generateUniqueSlug($data['name']);
-        return $this->update($id, $data);
-    }
-
-    public function deletecategory($id)
-    {
+    public function deleteCategory($id) {
         return $this->delete($id);
     }
 
+    public function updateCategory($id, $data) {
+        $data['slug'] = $this->generateUniqueSlug($data['name']);
+        return $this->update($id,$data);
+    }
 
     private function generateUniqueSlug($name)
     {
@@ -74,5 +68,3 @@ class CategoryModel extends Model
         return $newSlug;
     }
 }
-
-

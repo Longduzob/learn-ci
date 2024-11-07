@@ -28,16 +28,6 @@ class TableUser extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
             ],
-            'ad_facturation' => [
-                'type'       => 'VARCHAR',
-                'constraint' => '255',
-                'null'       => true,
-            ],
-            'ad_livraison' => [
-                'type'       => 'VARCHAR',
-                'constraint' => '255',
-                'null'       => true,
-            ],
             'created_at' => [
                 'type'       => 'DATETIME',
                 'null'       => true,

@@ -1,5 +1,4 @@
 <?php if (isset($messages)) { ?>
-
     <script type="text/javascript">
         jQuery(function(){
             toastr.options = {

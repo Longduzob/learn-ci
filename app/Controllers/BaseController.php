@@ -28,6 +28,9 @@ abstract class BaseController extends Controller
      */
     protected $request;
 
+    protected $messages = [];
+    protected $title = "Ma Page";
+    protected $title_prefix = "Learn-Ci";
     /**
      * An array of helpers to be loaded automatically upon
      * class instantiation. These helpers will be available
@@ -37,19 +40,12 @@ abstract class BaseController extends Controller
      */
     protected $helpers = [];
 
-    protected $messages = [];
-
-    protected $title = "Ma Page";
-    protected $title_prefix = "Learn-Ci";
-
     /**
      * Be sure to declare properties for any property fetch you initialized.
      * The creation of dynamic property is deprecated in PHP 8.2.
      */
     protected $session;
-
     protected $start_session = true;
-
     protected $require_auth = true;
     /**
      * @return void
@@ -60,38 +56,67 @@ abstract class BaseController extends Controller
         parent::initController($request, $response, $logger);
 
         if ($this->start_session){
-            $this->start_session = session();
-            if (session()->has('messages')){
+            log_message('debug','start session');
+            $this->session = session();
+            // Use flashdata for messages
+            if (session()->has('messages')) {
                 $this->messages = session()->getFlashdata('messages');
             }
-    }
-        $this->router = service('router');
-
-        if($this->require_auth) {
-            $this->checkLogin();
-
         }
+        $this->router  = service('router');
 
+        // Vérifier l'authentification si nécessaire
+        if ($this->require_auth) {
+            $this->checkLogin();
+        }
     }
 
-    protected function checkLogin()
+    /**
+     * Check if the user is authenticated.
+     */
+    protected function checkLogin($redirect = true)
     {
-        if (!isset($this->session->user)){
-                return $this->redirect("/product");
+        if (!isset($this->session->user)) {
+            if ($redirect) {
+                $this->session->set('redirect_url', current_url(true)->getPath()); // Save the current URL for redirection after login
+                return $this->redirect('/login');
             }
+            return false;
+        }
         return true;
     }
-
-
     public function logout()
     {
         if (isset($this->session->user)) {
             $this->session->remove('user');
         }
-        return $this->redirect('login');
+
+        // Rediriger l'utilisateur vers la page de connexion ou une autre page
+        return $this->redirect('/login');
     }
+    /**
+     * Redirection
+     * redirect to the page, every path component can be passed as au parameters
+     * ex: $this->redirect('controller','methoid','param1', 'param2')
+     *  => /controller/method/param1/param2
+     */
+    public function redirect(string $url, array $data = [])
+    {
 
+        //$url = implode('/', array_slice(func_get_args(), 1));
+        $url = base_url($url);
+        // Store messages in flashdata
+        if (count($this->messages) > 0) {
+            session()->setFlashdata('messages', $this->messages);
+        }
 
+        // Store additional data in flashdata
+        if (!empty($data)) {
+            session()->setFlashdata('data', $data);
+        }
+        header("Location: {$url}");
+        exit; /** @phpstan-ignore-line */
+    }
 
     public function view($vue = null, $datas = [], $admin = false)
     {
@@ -107,6 +132,7 @@ abstract class BaseController extends Controller
                 [
                     'template_dir' => $template_dir,
                     'user' => ($this->session->user ?? null),
+                    'cart' => ($this->session->cart ?? null),
                     'title' => sprintf('%s : %s', $this->title, $this->title_prefix)
                 ]
             )
@@ -136,24 +162,4 @@ abstract class BaseController extends Controller
         log_message('debug', $txt);
         $this->messages[] = ['txt' => $txt, 'class' => 'alert-danger', 'toast' => 'error'];
     }
-
-    public function redirect(string $url, array $data = [])
-    {
-
-        //$url = implode('/', array_slice(func_get_args(), 1));
-        $url = base_url($url);
-        // Store messages in flashdata
-        if (count($this->messages) > 0) {
-            session()->setFlashdata('messages', $this->messages);
-        }
-
-        // Store additional data in flashdata
-        if (!empty($data)) {
-            session()->setFlashdata('data', $data);
-        }
-        header("Location: {$url}");
-        exit; /** @phpstan-ignore-line */
-    }
-
-
 }
